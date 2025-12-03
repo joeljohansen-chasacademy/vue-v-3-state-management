@@ -19,7 +19,7 @@ const { clickCount, todo } = storeToRefs(store);
 				Todo (direct access): <strong>{{ store.todo.text }}</strong>
 			</p>
 			<p>
-				Status (reactive): <strong>{{ todo.done ? "Klar" : "Pågår" }}</strong>
+				Status : <strong>{{ todo.done ? "Klar" : "Pågår" }}</strong>
 			</p>
 			<label>
 				Uppdatera text:
