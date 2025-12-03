@@ -16,7 +16,7 @@ const { clickCount, todo } = storeToRefs(store);
 
 		<div class="todo-box">
 			<p>
-				Todo (direct access): <strong>{{ store.todo.text }}</strong>
+				Todo (direct access): <strong>{{ todo.text }}</strong>
 			</p>
 			<p>
 				Status : <strong>{{ todo.done ? "Klar" : "Pågår" }}</strong>

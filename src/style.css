@@ -55,3 +55,29 @@ input {
 #app {
 	min-height: 100vh;
 }
+/* Dark mode - global styles */
+.dark {
+	color: #f1f5f9;
+	background-color: #0f172a;
+}
+
+.dark body {
+	background: radial-gradient(circle at top, #1e293b, #0f172a 60%);
+}
+
+.dark button {
+	background-color: #1e293b;
+	border-color: #334155;
+	color: #f1f5f9;
+}
+
+.dark button:hover {
+	border-color: #818cf8;
+	color: #a5b4fc;
+}
+
+.dark input {
+	background-color: #1e293b;
+	border-color: #334155;
+	color: #f1f5f9;
+}

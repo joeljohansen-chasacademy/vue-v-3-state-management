@@ -12,17 +12,12 @@ import Example5MultipleStores from '@/components/examples/Example5MultipleStores
 import UserInfo from '@/components/UserInfo.vue';
 import ProductList from '@/components/ProductList.vue';
 import ShoppingCart from '@/components/ShoppingCart.vue';
+import SettingsStore from '@/exercises/SettingsStore.vue';
 
-type TabKey = 'examples' | 'demo';
+type TabKey = 'examples' | 'demo' | 'settings';
 const activeTab = ref<TabKey>('examples');
 
-const exampleComponents = [
-  Example1BasicState,
-  Example2Getters,
-  Example3Actions,
-  Example4AsyncActions,
-  Example5MultipleStores,
-];
+const exampleComponents = [Example1BasicState, Example2Getters, Example3Actions, Example4AsyncActions, Example5MultipleStores];
 </script>
 
 <template>
@@ -48,6 +43,13 @@ const exampleComponents = [
         >
           Komplett demo
         </button>
+        <button
+          type="button"
+          :class="{ active: activeTab === 'settings' }"
+          @click="activeTab = 'settings'"
+        >
+          Inställningar
+        </button>
       </nav>
     </header>
 
@@ -64,7 +66,7 @@ const exampleComponents = [
       </div>
     </section>
 
-    <section v-else class="demo-section">
+    <section v-if="activeTab === 'demo'" class="demo-section">
       <p class="section-lead">
         Enkel produktkatalog + varukorg som delar state mellan flera stores.
       </p>
@@ -73,6 +75,13 @@ const exampleComponents = [
         <ProductList />
         <ShoppingCart />
       </div>
+    </section>
+
+    <section v-else="activeTab === 'settings'" class="settings-section">
+      <p class="section-lead">
+        Inställningar för appen.
+      </p>
+      <SettingsStore />
     </section>
   </main>
 </template>

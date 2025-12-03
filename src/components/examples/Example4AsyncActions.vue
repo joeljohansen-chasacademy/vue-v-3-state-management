@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAsyncExampleStore } from "@/stores/examples/4-async-actions";
+import { onMounted } from "vue";
 
 const store = useAsyncExampleStore();
 const { isLoading, error } = storeToRefs(store);
+
+// On mounted kan vi inte använda i vår store, denna bor i komponenten och dess livscykel
+/* onMounted(() => {
+	store.fetchPosts();
+}); */
 </script>
 <template>
 	<section class="example-card">

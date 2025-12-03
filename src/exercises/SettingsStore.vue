@@ -47,25 +47,35 @@ Tips:
 
 <script setup lang="ts">
 import { watch, onMounted } from 'vue'
-// TODO: Importera useSettingsStore
+import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '../stores/settings'
 
-// TODO: Skapa store instans och använd storeToRefs
+// Skapa store instans
+const store = useSettingsStore()
 
-// TODO: Funktion för att applicera theme
-// const applyTheme = () => {
-//   if (theme.value === 'dark') {
-//     document.documentElement.classList.add('dark')
-//   } else {
-//     document.documentElement.classList.remove('dark')
-//   }
-// }
+// Använd storeToRefs för att få reaktiva refs till state
+const { theme, language, notifications, username } = storeToRefs(store)
 
-// TODO: Ladda settings när komponenten mountas
-// onMounted(() => { ... })
+// Funktion för att applicera theme på dokumentet
+const applyTheme = () => {
+  if (theme.value === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
 
-// TODO: Watch för att automatiskt spara när settings ändras
-// watch([theme, language, notifications, username], () => { ... })
+// Ladda settings när komponenten mountas
+onMounted(() => {
+  store.loadSettings()
+  applyTheme()
+})
 
+// Watch för att automatiskt spara och applicera theme när settings ändras
+watch([theme, language, notifications, username], () => {
+  store.saveSettings()
+  applyTheme()
+})
 </script>
 
 <template>
@@ -73,46 +83,46 @@ import { watch, onMounted } from 'vue'
     <h1>Inställningar</h1>
     
     <div class="settings-form">
-      <!-- TODO: Username input -->
+      <!-- Username input -->
       <div class="setting-group">
         <label>Användarnamn:</label>
-        <input type="text" placeholder="Ditt namn">
+        <input type="text" v-model="username" placeholder="Ditt namn">
       </div>
 
-      <!-- TODO: Theme dropdown -->
+      <!-- Theme dropdown -->
       <div class="setting-group">
         <label>Tema:</label>
-        <select>
+        <select v-model="theme">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
       </div>
 
-      <!-- TODO: Language dropdown -->
+      <!-- Language dropdown -->
       <div class="setting-group">
         <label>Språk:</label>
-        <select>
+        <select v-model="language">
           <option value="sv">Svenska</option>
           <option value="en">English</option>
         </select>
       </div>
 
-      <!-- TODO: Notifications toggle -->
+      <!-- Notifications toggle -->
       <div class="setting-group">
         <label>
-          <input type="checkbox">
+          <input type="checkbox" v-model="notifications">
           Aktivera notifikationer
         </label>
       </div>
 
-      <!-- TODO: Spara-knapp -->
-      <button class="save-btn">Spara inställningar</button>
+      <!-- Spara-knapp -->
+      <button class="save-btn" @click="store.saveSettings()">Spara inställningar</button>
     </div>
 
-    <!-- TODO: Visa aktuella settings (för debug) -->
+    <!-- Visa aktuella settings (för debug) -->
     <div class="current-settings">
       <h3>Aktuella inställningar:</h3>
-      <pre><!-- Visa settings här som JSON --></pre>
+      <pre>{{ JSON.stringify({ theme, language, notifications, username }, null, 2) }}</pre>
     </div>
   </div>
 </template>
