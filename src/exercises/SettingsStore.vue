@@ -46,177 +46,181 @@ Tips:
 -->
 
 <script setup lang="ts">
-import { watch, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useSettingsStore } from '../stores/settings'
+import { watch, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useSettingsStore } from "../stores/settings";
 
 // Skapa store instans
-const store = useSettingsStore()
+const store = useSettingsStore();
 
 // Använd storeToRefs för att få reaktiva refs till state
-const { theme, language, notifications, username } = storeToRefs(store)
+const { theme, language, notifications, username } = storeToRefs(store);
 
 // Funktion för att applicera theme på dokumentet
 const applyTheme = () => {
-  if (theme.value === 'dark') {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-}
+	if (theme.value === "dark") {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+};
 
 // Ladda settings när komponenten mountas
 onMounted(() => {
-  store.loadSettings()
-  applyTheme()
-})
+	store.loadSettings();
+	applyTheme();
+});
 
 // Watch för att automatiskt spara och applicera theme när settings ändras
-watch([theme, language, notifications, username], () => {
-  store.saveSettings()
-  applyTheme()
-})
+watch([theme, language, username], () => {
+	store.saveSettings();
+	applyTheme();
+});
 </script>
 
 <template>
-  <div class="settings-container">
-    <h1>Inställningar</h1>
-    
-    <div class="settings-form">
-      <!-- Username input -->
-      <div class="setting-group">
-        <label>Användarnamn:</label>
-        <input type="text" v-model="username" placeholder="Ditt namn">
-      </div>
+	<div class="settings-container">
+		<h1>Inställningar</h1>
 
-      <!-- Theme dropdown -->
-      <div class="setting-group">
-        <label>Tema:</label>
-        <select v-model="theme">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
+		<div class="settings-form">
+			<!-- Username input -->
+			<div class="setting-group">
+				<label>Användarnamn:</label>
+				<input type="text" v-model="username" placeholder="Ditt namn" />
+			</div>
 
-      <!-- Language dropdown -->
-      <div class="setting-group">
-        <label>Språk:</label>
-        <select v-model="language">
-          <option value="sv">Svenska</option>
-          <option value="en">English</option>
-        </select>
-      </div>
+			<!-- Theme dropdown -->
+			<div class="setting-group">
+				<label>Tema:</label>
+				<select v-model="theme">
+					<option value="light">Light</option>
+					<option value="dark">Dark</option>
+				</select>
+			</div>
 
-      <!-- Notifications toggle -->
-      <div class="setting-group">
-        <label>
-          <input type="checkbox" v-model="notifications">
-          Aktivera notifikationer
-        </label>
-      </div>
+			<!-- Language dropdown -->
+			<div class="setting-group">
+				<label>Språk:</label>
+				<select v-model="language">
+					<option value="sv">Svenska</option>
+					<option value="en">English</option>
+				</select>
+			</div>
 
-      <!-- Spara-knapp -->
-      <button class="save-btn" @click="store.saveSettings()">Spara inställningar</button>
-    </div>
+			<!-- Notifications toggle -->
+			<div class="setting-group">
+				<label>
+					<input type="checkbox" v-model="notifications" />
+					Aktivera notifikationer
+				</label>
+			</div>
 
-    <!-- Visa aktuella settings (för debug) -->
-    <div class="current-settings">
-      <h3>Aktuella inställningar:</h3>
-      <pre>{{ JSON.stringify({ theme, language, notifications, username }, null, 2) }}</pre>
-    </div>
-  </div>
+			<!-- Spara-knapp -->
+			<button class="save-btn" @click="store.saveSettings()">
+				Spara inställningar
+			</button>
+		</div>
+
+		<!-- Visa aktuella settings (för debug) -->
+		<div class="current-settings">
+			<h3>Aktuella inställningar:</h3>
+			<pre>{{
+				JSON.stringify({ theme, language, notifications, username }, null, 2)
+			}}</pre>
+		</div>
+	</div>
 </template>
 
 <style scoped>
 .settings-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
+	max-width: 500px;
+	margin: 2rem auto;
+	padding: 2rem;
 }
 
 .settings-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	background: white;
+	padding: 2rem;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .setting-group {
-  margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 .setting-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
 }
 
 .setting-group input[type="text"],
 .setting-group select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+	width: 100%;
+	padding: 0.75rem;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	font-size: 1rem;
 }
 
 .setting-group input[type="checkbox"] {
-  margin-right: 0.5rem;
-  width: 20px;
-  height: 20px;
+	margin-right: 0.5rem;
+	width: 20px;
+	height: 20px;
 }
 
 .save-btn {
-  width: 100%;
-  padding: 1rem;
-  background: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
+	width: 100%;
+	padding: 1rem;
+	background: #42b983;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.3s;
 }
 
 .save-btn:hover {
-  background: #359268;
+	background: #359268;
 }
 
 .current-settings {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 4px;
+	margin-top: 2rem;
+	padding: 1rem;
+	background: #f5f5f5;
+	border-radius: 4px;
 }
 
 .current-settings pre {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 4px;
-  overflow-x: auto;
+	background: #fff;
+	padding: 1rem;
+	border-radius: 4px;
+	overflow-x: auto;
 }
 
 /* Dark theme styles */
 :global(.dark) .settings-form {
-  background: #2d2d2d;
-  color: #fff;
+	background: #2d2d2d;
+	color: #fff;
 }
 
 :global(.dark) .setting-group input,
 :global(.dark) .setting-group select {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #444;
+	background: #1a1a1a;
+	color: #fff;
+	border-color: #444;
 }
 
 :global(.dark) .current-settings {
-  background: #2d2d2d;
-  color: #fff;
+	background: #2d2d2d;
+	color: #fff;
 }
 
 :global(.dark) .current-settings pre {
-  background: #1a1a1a;
-  color: #fff;
+	background: #1a1a1a;
+	color: #fff;
 }
 </style>
